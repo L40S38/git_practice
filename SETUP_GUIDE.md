@@ -80,6 +80,64 @@ dir
 - 初期コミットが作成されている
 - `main` ブランチで作業可能
 
+#### 🌐 練習環境のリモート管理（任意）
+
+練習環境をリモートリポジトリで管理したい場合：
+
+**Step 1: 現在のブランチ名を確認**
+```cmd
+# 現在のブランチ名を確認
+git branch
+
+# 詳細な状態確認
+git status
+```
+
+**新規リモートリポジトリの場合**
+```cmd
+# リモートリポジトリを追加
+git remote add origin <your-practice-repo-url>
+
+# 現在のブランチ名に応じて初回プッシュ
+# ブランチが "main" の場合
+git push -u origin main
+
+# ブランチが "master" の場合
+git push -u origin master
+
+# 以降の作業後は簡単にプッシュ
+git add .
+git commit -m "Practice: <何を練習したか>"
+git push
+```
+
+**既存リモートがある場合**
+```cmd
+# リモート設定確認
+git remote -v
+
+# 必要に応じてURL変更
+git remote set-url origin <new-repo-url>
+
+# 現在のブランチ名に応じてプッシュ
+git push origin main    # mainブランチの場合
+git push origin master  # masterブランチの場合
+```
+
+**⚠️ Push時のトラブル解決**
+```cmd
+# "No configured push destination" エラーの場合
+git remote add origin <repository-url>
+git push -u origin main
+
+# "no upstream branch" エラーの場合
+git push -u origin main
+
+# "Updates were rejected" エラーの場合
+git pull origin main  # または git pull --rebase origin main
+git push origin main
+```
+
 `PRACTICE_GUIDE.md` の手順に従ってGitコマンドの練習を開始できます。
 
 ---
@@ -197,23 +255,289 @@ git status
 dir practice
 ```
 
+#### Phase 6: 親リポジトリのリモートプッシュ（任意）
+
+プロジェクト全体をリモートリポジトリで管理する場合：
+
+**Step 1: 現在のブランチ名を確認**
+```cmd
+# 現在のブランチ名を確認
+git branch
+
+# または詳細情報を確認
+git status
+```
+
+**新規リモートリポジトリの場合**
+```cmd
+# リモートリポジトリを追加
+git remote add origin <main-repository-url>
+
+# 現在のブランチ名に応じてプッシュ
+# ブランチが "main" の場合
+git push -u origin main
+
+# ブランチが "master" の場合
+git push -u origin master
+
+# 以降は簡単にプッシュ可能
+git push
+```
+
+**ブランチ名統一（main に変更する場合）**
+```cmd
+# 現在のブランチ名を確認
+git branch
+
+# master から main にブランチ名を変更
+git branch -m master main
+
+# リモートにmainブランチとしてプッシュ
+git push -u origin main
+
+# リモートのmasterブランチを削除（必要に応じて）
+git push origin --delete master
+```
+
+**既存リモートリポジトリがある場合**
+```cmd
+# 現在のリモート設定確認
+git remote -v
+
+# 必要に応じてリモートURL変更
+git remote set-url origin <new-repository-url>
+
+# プッシュ実行
+git push origin main
+```
+
 ### 🌐 リモートリポジトリ版セットアップ
 
 より本格的な環境で運用する場合：
 
-**1. practice ディレクトリをリモートリポジトリにプッシュ**
+#### ケース1: 新規リモートリポジトリを作成する場合
+
+**1. practice ディレクトリ（Submodule）をリモートリポジトリにプッシュ**
 ```cmd
 # Phase 4のStep 4完了後、practice ディレクトリに移動
 cd practice
 
-# リモートリポジトリを追加
+# 現在のブランチとリモートの状態確認
+git branch
+git remote -v
+
+# リモートリポジトリを追加（まだない場合）
 git remote add origin <your-practice-repository-url>
 
-# リモートにプッシュ
-git push -u origin main
+# 現在のブランチに応じて初回プッシュ（upstream設定付き）
+git push -u origin main    # mainブランチの場合
+git push -u origin master  # masterブランチの場合
 
 # 親ディレクトリに戻る
 cd ..
+```
+
+**2. 親リポジトリもリモートにプッシュ**
+```cmd
+# 親リポジトリのリモート設定（まだの場合）
+git remote add origin <your-main-repository-url>
+
+# 親リポジトリをプッシュ（Submodule参照情報も含む）
+git push -u origin main    # mainブランチの場合
+git push -u origin master  # masterブランチの場合
+```
+
+#### ケース2: 既存のリモートリポジトリがある場合
+
+**1. practice ディレクトリ（Submodule）の既存リモート確認と更新**
+```cmd
+# practice ディレクトリに移動
+cd practice
+
+# 現在のリモート設定とブランチを確認
+git remote -v
+git branch
+
+# 既存のリモートがある場合はそのまま使用
+# または新しいリモートに変更する場合
+git remote set-url origin <new-repository-url>
+
+# リモートにプッシュ（ブランチ名に応じて）
+git push origin main    # mainブランチの場合
+git push origin master  # masterブランチの場合
+
+# 親ディレクトリに戻る
+cd ..
+```
+
+**2. 親リポジトリの既存リモート確認と更新**
+```cmd
+# 親リポジトリのリモート設定確認
+git remote -v
+git branch
+
+# 必要に応じてリモートURL変更
+git remote set-url origin <new-main-repository-url>
+
+# 親リポジトリをプッシュ（Submodule参照情報も含む）
+git push origin main    # mainブランチの場合
+git push origin master  # masterブランチの場合
+```
+
+#### 📋 Submodule更新後の推奨ワークフロー
+
+**Submodule内で変更を行った場合：**
+```cmd
+# 1. Submodule内で作業とコミット
+cd practice
+# ファイル編集...
+git add .
+git commit -m "Update practice exercises"
+git push origin main  # Submoduleのリモートにプッシュ
+cd ..
+
+# 2. 親リポジトリでSubmodule参照を更新
+git add practice
+git commit -m "Update practice submodule reference"
+git push origin main  # 親リポジトリのリモートにプッシュ
+```
+
+#### 🚨 Push時のよくあるエラーと解決法
+
+**Error 1: "error: src refspec main does not match any"**
+```cmd
+# 原因: ローカルブランチ名とプッシュ先が不一致
+# 解決: 現在のブランチ名を確認してプッシュ
+git branch  # ブランチ名確認
+git push -u origin master  # masterブランチの場合
+git push -u origin main    # mainブランチの場合
+```
+
+**Error 2: "fatal: No configured push destination"**
+```cmd
+# 原因: リモートリポジトリが設定されていない
+# 解決: リモートを追加
+git remote add origin <repository-url>
+# 現在のブランチ名に応じてプッシュ
+git push -u origin main    # mainブランチの場合
+git push -u origin master  # masterブランチの場合
+```
+
+**Error 3: "fatal: The current branch main has no upstream branch"**
+```cmd
+# 原因: upstream（追跡ブランチ）が設定されていない
+# 解決: -u オプションでupstreamを設定
+git push -u origin main    # mainブランチの場合
+git push -u origin master  # masterブランチの場合
+
+# 以降は単純にpushできる
+git push
+```
+
+**Error 4: "Updates were rejected because the remote contains work"**
+```cmd
+# 原因: リモートに新しいコミットがある
+# 解決: まずfetchして確認
+git fetch origin
+git log --oneline --graph origin/main
+
+# 必要に応じてmergeまたはrebase
+git pull origin main
+# または
+git pull --rebase origin main
+
+# その後pushを実行
+git push origin main
+```
+
+**3. リモートからSubmoduleとして再追加する場合**
+```cmd
+# ローカルのpracticeディレクトリを削除
+rmdir /s /q practice
+
+# リモートリポジトリからSubmoduleとして追加
+git submodule add <your-practice-repository-url> practice
+
+# コミット
+git add .gitmodules practice
+git commit -m "Add practice directory as submodule from remote repository"
+```
+
+### 📝 Submodule日常管理のワークフロー
+
+#### 🔄 通常の開発サイクル
+
+**1. Submodule内での作業**
+```cmd
+# Submoduleディレクトリに移動
+cd practice
+
+# 最新の状態に更新
+git pull origin main  # またはmaster
+
+# 作業用ブランチを作成（推奨）
+git checkout -b feature-new-exercise
+
+# ファイル編集・追加
+# （練習用コンテンツの追加、修正など）
+
+# 変更をコミット
+git add .
+git commit -m "Add new Git branching exercise"
+
+# リモートにプッシュ
+git push origin feature-new-exercise
+
+# メインブランチにマージ（またはPull Request作成）
+git checkout main
+git merge feature-new-exercise
+git push origin main
+
+# 作業ブランチを削除
+git branch -d feature-new-exercise
+git push origin --delete feature-new-exercise
+
+# 親ディレクトリに戻る
+cd ..
+```
+
+**2. 親リポジトリでの Submodule 参照更新**
+```cmd
+# Submoduleの新しいコミットを親リポジトリに反映
+git add practice
+git commit -m "Update practice submodule: Add new branching exercise"
+
+# 親リポジトリをリモートにプッシュ
+git push origin main
+```
+
+#### 👥 チーム開発での Submodule 管理
+
+**他の開発者が Submodule を更新した場合：**
+```cmd
+# 親リポジトリの最新版を取得
+git pull origin main
+
+# Submodule参照が更新されていることを確認
+git status
+
+# Submoduleを最新のコミットに更新
+git submodule update
+
+# または強制更新
+git submodule update --remote
+```
+
+**新しい環境でSubmodule込みプロジェクトを開始：**
+```cmd
+# リポジトリをクローン（Submodule込み）
+git clone --recurse-submodules <main-repository-url>
+
+# または既存クローンでSubmoduleを初期化
+git clone <main-repository-url>
+cd <repository-name>
+git submodule init
+git submodule update
 ```
 
 **2. ローカルpracticeディレクトリを削除してリモートからSubmodule追加**
@@ -280,7 +604,65 @@ git submodule update
 git submodule update --init --force
 ```
 
-#### 4. コミットエラー
+#### 4. Git Push関連エラー
+
+**"error: src refspec main does not match any" エラー**
+```cmd
+# 原因: ローカルブランチ名とプッシュ先ブランチ名が異なる
+# 現在のブランチ名を確認
+git branch
+
+# masterブランチの場合
+git push -u origin master
+
+# ブランチ名をmainに変更したい場合
+git branch -m master main
+git push -u origin main
+```
+
+**"fatal: No configured push destination" エラー**
+```cmd
+# 原因: リモートリポジトリが設定されていない
+# 解決法:
+git remote add origin <repository-url>
+# 現在のブランチ名に応じてプッシュ
+git push -u origin main     # mainブランチの場合
+git push -u origin master   # masterブランチの場合
+```
+
+**"fatal: The current branch has no upstream branch" エラー**
+```cmd
+# 原因: upstream（追跡ブランチ）が未設定
+# 解決法:
+git push -u origin main     # mainブランチの場合
+git push -u origin master   # masterブランチの場合
+
+# 以降は git push のみでOK
+```
+
+**"Updates were rejected because the remote contains work" エラー**
+```cmd
+# 原因: リモートに新しいコミットが存在
+# 解決法1: マージしてからプッシュ
+git pull origin main    # または git pull origin master
+git push origin main    # または git push origin master
+
+# 解決法2: リベースしてからプッシュ
+git pull --rebase origin main    # または master
+git push origin main             # または master
+```
+
+**"Permission denied (publickey)" エラー**
+```cmd
+# 原因: SSH認証の問題
+# 解決法1: HTTPSのURLを使用
+git remote set-url origin https://github.com/username/repo.git
+
+# 解決法2: SSH鍵を設定（GitHub等）
+# GitHubの設定でSSH鍵を追加
+```
+
+#### 5. コミットエラー
 ```cmd
 # ユーザー設定が未設定の場合
 git config user.name "Your Name"
