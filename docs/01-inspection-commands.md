@@ -290,6 +290,45 @@ git checkout -b recovered-branch HEAD@{3}
 
 ---
 
+## 🔍 git log と git reflog の違いと使い分け
+
+- **`git log`**: リポジトリのコミット履歴を表示します。通常の履歴確認に使用され、現在のブランチや他のブランチのコミット履歴を確認するのに適しています。
+  - **用途**: コミットの内容や履歴を確認する。
+  - **例**: `git log --oneline` で簡潔な履歴を確認。
+
+- **`git reflog`**: Git の操作履歴を表示します。`git reset` や `git rebase` などで失われたコミットを復旧する際に役立ちます。
+  - **用途**: 操作履歴を確認し、失われたコミットやブランチを復旧する。
+  - **例**: `git reflog` で HEAD の移動履歴を確認。
+
+#### 使い分けのポイント
+- **履歴の確認**: 通常のコミット履歴を確認したい場合は `git log` を使用。
+- **復旧作業**: 誤操作で失われたコミットやブランチを復旧したい場合は `git reflog` を使用。
+
+#### 実際の例
+
+```bash
+$ git log --oneline # commit関連しか表示されない
+8b4dedf (HEAD -> main) --cached comment out
+14d3b14 (origin/main) 読みづらさ解消
+2f6d62d submodule url added
+73058dd SETUP_GUIDE.md updated
+9d07094 instruction updated
+f0305bc Add practice directory as submodule
+1a0cd68 Initial commit: Add Git learning documentation
+
+$ git reflog # commit以外の作業履歴も残る
+8b4dedf (HEAD -> main) HEAD@{0}: commit: --cached comment out
+14d3b14 (origin/main) HEAD@{1}: commit: 読みづらさ解消
+2f6d62d HEAD@{2}: commit: submodule url added
+73058dd HEAD@{3}: commit: SETUP_GUIDE.md updated
+9d07094 HEAD@{4}: Branch: renamed refs/heads/master to refs/heads/main
+9d07094 HEAD@{6}: commit: instruction updated
+f0305bc HEAD@{7}: commit: Add practice directory as submodule
+1a0cd68 HEAD@{8}: commit (initial): Initial commit: Add Git learning documentation
+```
+
+---
+
 ## 🔍 状況確認の流れ
 
 コミット履歴を理解するための推奨の確認手順：
