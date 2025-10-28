@@ -1,0 +1,24 @@
+# Git除外設定
+
+# 一時ファイル
+*.tmp
+*.temp
+
+# ログファイル
+*.log
+
+# IDE設定ファイル
+.vscode/
+.idea/
+
+# OS生成ファイル
+Thumbs.db
+.DS_Store
+
+# Python関連
+__pycache__/
+*.pyc
+*.pyo
+
+# 練習用の一時的なリポジトリ（セットアップスクリプトで作成される）
+practice/temp-repo/
