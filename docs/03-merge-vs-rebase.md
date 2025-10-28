@@ -1299,7 +1299,367 @@ bc23de4 Common ancestor
 
 ---
 
-## 🚨 よくあるトラブルと解決法
+---
+
+## 🚨 コンフリクト解消の実践ガイド
+
+### 📋 コンフリクト解消の基本フロー
+
+```bash
+# 1. コンフリクトが発生
+$ git merge feature-branch
+Auto-merging src/config.js
+CONFLICT (content): Merge conflict in src/config.js
+Automatic merge failed; fix conflicts and then commit the result.
+
+# 2. コンフリクトファイルを確認
+$ git status
+Unmerged paths:
+        both modified:   src/config.js
+
+# 3. ファイルを編集して解決（後述のツール使用）
+
+# 4. 解決済みとしてマーク
+$ git add src/config.js
+
+# 5. マージを完了
+$ git commit
+```
+
+### 🛠️ ツール別の解消方法
+
+#### 1️⃣ VS Code（最もおすすめ）
+
+**特徴:**
+- ✅ コンフリクトを視覚的に表示
+- ✅ ボタンクリックで簡単解決
+- ✅ 3-way diff で変更を比較可能
+- ✅ 無料で高機能
+
+**使い方:**
+
+```bash
+# VS Code で開く
+code .
+
+# コンフリクトファイルを開くと自動的に以下が表示される:
+```
+
+```javascript
+// コンフリクトマーカーが色分けされる
+<<<<<<< HEAD (Current Change) 緑色
+const timeout = 3000;
+=======
+const timeout = 5000; 青色
+>>>>>>> feature (Incoming Change)
+
+// 上部にボタンが表示される:
+// [Accept Current Change] [Accept Incoming Change] 
+// [Accept Both Changes] [Compare Changes]
+```
+
+**操作手順:**
+1. コンフリクトファイルを開く
+2. 各コンフリクト箇所で適切なボタンをクリック
+   - **Accept Current Change**: HEAD（現在のブランチ）の変更を採用
+   - **Accept Incoming Change**: マージしようとしているブランチの変更を採用
+   - **Accept Both Changes**: 両方の変更を保持
+   - **Compare Changes**: 詳細な差分を表示
+3. すべてのコンフリクトを解決
+4. ファイルを保存
+5. ソース管理タブで変更をステージング
+6. コミットメッセージを入力してコミット
+
+**推奨設定:**
+```json
+// settings.json
+{
+  "merge-conflict.diffViewPosition": "Current",
+  "git.decorations.enabled": true
+}
+```
+
+---
+
+#### 2️⃣ GitHub Desktop
+
+**特徴:**
+- ✅ 初心者に優しいGUI
+- ✅ コンフリクトファイルを一覧表示
+- ✅ 外部エディタで開くボタン
+- ❌ 内蔵エディタはなし
+
+**使い方:**
+
+1. **コンフリクト発生を検知**
+   - GitHub Desktop が自動的にコンフリクトを表示
+   - "X conflicted files" と表示される
+
+2. **ファイルを開く**
+   - コンフリクトファイルを右クリック
+   - "Open in [デフォルトエディタ]" を選択
+   - または "Show in Finder/Explorer" → 手動で開く
+
+3. **エディタで解決**
+   - VS Code などのエディタでコンフリクトマーカーを編集
+   - 保存
+
+4. **GitHub Desktop に戻る**
+   - 解決済みファイルにチェックマークが表示される
+   - "Mark as resolved" ボタンをクリック
+
+5. **マージを完了**
+   - "Commit merge" ボタンをクリック
+
+**ヒント:**
+- デフォルトエディタを VS Code に設定しておくと便利
+  - GitHub Desktop 設定 → Integrations → External Editor → VS Code
+
+---
+
+#### 3️⃣ GitHub.com での解消
+
+**方法A: プルリクエストでのコンフリクト解決**
+
+**特徴:**
+- ✅ ブラウザだけで完結
+- ✅ チームメンバーと共有しやすい
+- ⚠️ 複雑なコンフリクトには不向き
+- ⚠️ 「両方の変更を保持」は双方向マージの危険性あり
+
+**使い方:**
+
+1. **PR でコンフリクトを確認**
+   ```
+   This branch has conflicts that must be resolved
+   [Resolve conflicts] ボタン
+   ```
+
+2. **Web エディタで解決**
+   - コンフリクトマーカーが表示される
+   - 手動で編集するか、ボタンで選択
+   - ❌ **注意**: "Accept both changes" は双方向マージになる可能性
+
+3. **変更をコミット**
+   - "Mark as resolved" → "Commit merge"
+
+**⚠️ 推奨されない理由:**
+- `develop → feature` のマージで `feature → develop` も作成される可能性
+- 詳細は前述の「GitHub PR でのコンフリクト解決の特殊なケース」参照
+
+**推奨される代替手段:**
+```bash
+# ローカルで解決してから push
+git checkout feature
+git merge develop
+# VS Code などで解決
+git add .
+git commit
+git push
+# → PR が自動更新される
+```
+
+---
+
+**方法B: GitHub.com のファイル編集機能**
+
+**特徴:**
+- ✅ 小さな変更に便利
+- ❌ コンフリクト解消には使えない
+
+**用途:**
+- コンフリクトが起きていないファイルの編集
+- PR とは無関係な小さな修正
+
+---
+
+#### 4️⃣ コマンドライン（PowerShell/Command Prompt）
+
+**特徴:**
+- ✅ どんな環境でも使える
+- ✅ スクリプト化可能
+- ❌ 視覚的な支援なし
+- ❌ 初心者には難しい
+
+**使い方:**
+
+**ステップ1: コンフリクトを確認**
+```powershell
+# コンフリクトファイルを表示
+git status
+
+# コンフリクトの詳細
+git diff
+```
+
+**ステップ2: ファイルを手動編集**
+```powershell
+# メモ帳で開く（Windows）
+notepad src\config.js
+
+# PowerShell の ISE で開く
+powershell_ise src\config.js
+```
+
+ファイル内容:
+```javascript
+<<<<<<< HEAD
+const timeout = 3000;
+=======
+const timeout = 5000;
+>>>>>>> feature
+```
+
+**編集後:**
+```javascript
+const timeout = 5000;  // コンフリクトマーカーを削除
+```
+
+**ステップ3: 解決済みとしてマーク**
+```powershell
+# ファイルをステージング
+git add src\config.js
+
+# 状態確認
+git status
+```
+
+**ステップ4: マージを完了**
+```powershell
+# マージコミット作成
+git commit
+
+# デフォルトエディタが開く（通常は vim）
+# vim の操作:
+# - i キーで入力モード
+# - メッセージ入力
+# - Esc キーで終了
+# - :wq で保存して終了
+```
+
+**便利なコマンド:**
+```powershell
+# コンフリクトファイルのみ表示
+git diff --name-only --diff-filter=U
+
+# 両方の変更を確認
+git diff --ours    # 現在のブランチ
+git diff --theirs  # マージ元のブランチ
+
+# 一方の変更を全て採用（慎重に！）
+git checkout --ours src\config.js    # 自分の変更
+git checkout --theirs src\config.js  # 相手の変更
+git add src\config.js
+
+# マージを中止
+git merge --abort
+
+# デフォルトエディタを変更（推奨）
+git config --global core.editor "code --wait"  # VS Code
+git config --global core.editor "notepad"      # メモ帳
+```
+
+**PowerShell でのバッチ処理例:**
+```powershell
+# すべてのコンフリクトファイルを VS Code で開く
+git diff --name-only --diff-filter=U | ForEach-Object { code $_ }
+
+# コンフリクトファイルの数を確認
+$conflicts = git diff --name-only --diff-filter=U
+Write-Host "コンフリクト数: $($conflicts.Count)"
+```
+
+---
+
+### � ツール選択フロー
+
+```mermaid
+flowchart TD
+    A[コンフリクト発生] --> B{どのツールを使える？}
+    
+    B -->|VS Code インストール済み| C[✅ VS Code を使用<br/>最も推奨]
+    B -->|GitHub Desktop 使用中| D[✅ GitHub Desktop<br/>初心者向け]
+    B -->|どちらもない| E{環境は？}
+    
+    E -->|Web のみアクセス可能| F[⚠️ GitHub.com<br/>簡単なコンフリクトのみ]
+    E -->|コマンドラインのみ| G[PowerShell/CMD<br/>上級者向け]
+    
+    C --> H[視覚的に解決<br/>ボタンで選択]
+    D --> I[エディタで開く<br/>手動編集]
+    F --> J[⚠️ ローカル解決を推奨]
+    G --> K[手動編集<br/>git add & commit]
+    
+    style C fill:#90EE90
+    style D fill:#87CEEB
+    style F fill:#FFD700
+    style G fill:#FFA500
+```
+
+### ✅ 推奨される解消手順
+
+**基本方針: ローカルで解決 → VS Code を使う**
+
+```bash
+# 1. 最新を取得
+git fetch origin
+
+# 2. コンフリクトを発生させる
+git checkout feature
+git merge develop
+# または
+git rebase develop
+
+# 3. VS Code で開く
+code .
+
+# 4. VS Code でコンフリクトを解決
+# - コンフリクトファイルを開く
+# - ボタンで選択または手動編集
+# - 保存
+
+# 5. ステージングとコミット
+git add .
+git commit
+
+# 6. プッシュ
+git push origin feature
+```
+
+### ❌ 避けるべきパターン
+
+```bash
+# ❌ GitHub.com で「両方の変更を保持」
+# → 双方向マージのリスク
+
+# ❌ 理解せずに --ours / --theirs を使う
+git checkout --ours .   # 全ファイルで自分の変更を採用（危険）
+git checkout --theirs . # 全ファイルで相手の変更を採用（危険）
+
+# ❌ コンフリクトマーカーを残したままコミット
+# → 構文エラーになる
+
+# ❌ テストをスキップ
+# → 壊れたコードをプッシュしてしまう
+```
+
+### 💡 コンフリクト解消のチェックリスト
+
+**解消前:**
+- [ ] 作業中の変更をコミットまたは stash した
+- [ ] 最新の変更を fetch/pull した
+
+**解消中:**
+- [ ] すべてのコンフリクトマーカー（`<<<<<<<`, `=======`, `>>>>>>>`）を削除した
+- [ ] 両方の変更内容を理解した
+- [ ] 必要な変更をすべて保持した
+
+**解消後:**
+- [ ] `git status` でコンフリクトが残っていないか確認
+- [ ] テストを実行した（`npm test` など）
+- [ ] アプリケーションが正しく動作するか確認
+- [ ] コミットメッセージに解消内容を記録した
+
+---
 
 ### rebase 中のコンフリクト解決
 
