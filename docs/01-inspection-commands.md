@@ -70,20 +70,23 @@ Untracked files:
 # 基本的なログ表示
 git log
 
-# 1行で簡潔に表示
+# 各コミットあたり1行で簡潔に表示
 git log --oneline
+
+# 直近5コミット
+git log --oneline -5
 
 # グラフ形式で表示（ブランチの分岐が見やすい）
 git log --graph --oneline
 
-# 詳細な統計情報付き
+# 詳細な統計情報付き（qで終了）
 git log --stat
 
-# 変更内容も含めて表示
+# 変更内容も含めて表示（qで終了）
 git log -p
 git log --patch
 
-# 最新のN件のみ表示
+# 最新のN件のみ表示（qで終了）
 git log -5
 git log -n 5
 
@@ -111,8 +114,8 @@ git log --pretty=format:"%h - %an, %ar : %s"
 ### 📊 Mermaid グラフで見るコミット履歴
 
 ```mermaid
-gitgraph
-    commit id: "Initial commit"
+gitGraph
+    commit id: "Initial commit" tag: "v0.1"
     commit id: "Add README"
     branch feature
     checkout feature
@@ -120,7 +123,7 @@ gitgraph
     commit id: "Fix bug"
     checkout main
     commit id: "Update config"
-    merge feature
+    merge feature tag: "v1.0"
     commit id: "Release v1.0"
 ```
 
@@ -139,7 +142,7 @@ git diff
 
 # ステージングエリアと最新コミットの差分
 git diff --staged
-git diff --cached
+#git diff --cached # older name of --staged
 
 # 作業ディレクトリと最新コミットの差分
 git diff HEAD
@@ -320,4 +323,4 @@ git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(
 
 ## 📚 次のステップ
 
-確認系コマンドに慣れたら、次は [02. ブランチ操作系コマンド](02-branch-operations.md) に進みましょう。
+確認系コマンドに慣れたら、次は [02. ブランチ操作系コマンド](02-branch-operations.md) に進みましょう.
