@@ -47,9 +47,9 @@ dir
 ```
 
 サンプルファイルには以下が含まれます：
-- `app.py` - Pythonサンプルアプリケーション
+- `main.py` - Pythonサンプルスクリプト
 - `config.json` - 設定ファイル
-- `requirements.txt` - 依存関係
+- `README.md` - 手順のサマリー
 
 #### Step 5: 初期コミットの作成
 ```cmd
@@ -149,7 +149,7 @@ git push origin main
 
 ### 🚀 完全セットアップガイド
 
-#### Phase 1: 事前確認と準備
+#### Step 1: 事前確認と準備
 
 **1. ディレクトリ構成の確認**
 ```cmd
@@ -171,7 +171,7 @@ if exist .git (
 )
 ```
 
-#### Phase 2: 親リポジトリの初期化
+#### Step 2: 親リポジトリの初期化
 
 **3. 親リポジトリの設定**
 ```cmd
@@ -189,7 +189,7 @@ git add README.md docs/ .gitignore
 git commit -m "Initial commit: Add Git learning documentation"
 ```
 
-#### Phase 3: practice ディレクトリの直接Submodule化
+#### Step 3: practice ディレクトリの独立リポジトリ化
 
 **4. practice ディレクトリの独立リポジトリ化**
 ```cmd
@@ -212,7 +212,7 @@ git status
 cd ..
 ```
 
-#### Phase 4: Submodule設定
+#### Step 4: Submodule設定
 
 **5. practice ディレクトリをSubmoduleとして追加**
 ```cmd
@@ -232,7 +232,7 @@ git add .gitmodules practice
 git commit -m "Add practice directory as submodule"
 ```
 
-#### Phase 5: Submoduleの初期化と確認
+#### Step 5: Submoduleの初期化と確認
 
 **7. Submoduleの初期化**
 ```cmd
@@ -255,7 +255,7 @@ git status
 dir practice
 ```
 
-#### Phase 6: 親リポジトリのリモートプッシュ（任意）
+#### Step 6: 親リポジトリのリモートプッシュ（任意）
 
 プロジェクト全体をリモートリポジトリで管理する場合：
 
@@ -319,7 +319,7 @@ git push origin main
 
 **1. practice ディレクトリ（Submodule）をリモートリポジトリにプッシュ**
 ```cmd
-# Phase 4のStep 4完了後、practice ディレクトリに移動
+# Step 3完了後、practice ディレクトリに移動
 cd practice
 
 # 現在のブランチとリモートの状態確認
