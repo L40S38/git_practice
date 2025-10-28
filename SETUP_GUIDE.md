@@ -347,6 +347,38 @@ git push -u origin main    # mainブランチの場合
 git push -u origin master  # masterブランチの場合
 ```
 
+**3. .gitmodules ファイルのURL更新（重要）**
+```cmd
+# 現在の.gitmodulesの内容を確認
+type .gitmodules
+
+# 出力例:
+# [submodule "practice"]
+#     path = practice
+#     url = ./practice
+
+# .gitmodulesのURLをリモートリポジトリのURLに変更
+git config -f .gitmodules submodule.practice.url <your-practice-repository-url>
+
+# 変更後の内容を確認
+type .gitmodules
+
+# 出力例:
+# [submodule "practice"]
+#     path = practice
+#     url = https://github.com/username/practice.git
+
+# .gitmodulesの変更をコミット
+git add .gitmodules
+git commit -m "Update submodule URL to remote repository"
+git push origin main
+```
+
+**❗ なぜURL更新が必要か？**
+- 相対パス `./practice` は他の人がクローンした時に動作しない
+- リモートリポジトリのURLにすることで、どこからでもSubmoduleを取得可能
+- チーム開発で必須の設定
+
 #### ケース2: 既存のリモートリポジトリがある場合
 
 **1. practice ディレクトリ（Submodule）の既存リモート確認と更新**
@@ -382,6 +414,20 @@ git remote set-url origin <new-main-repository-url>
 # 親リポジトリをプッシュ（Submodule参照情報も含む）
 git push origin main    # mainブランチの場合
 git push origin master  # masterブランチの場合
+```
+
+**3. .gitmodules ファイルのURL更新（ケース2でも必要）**
+```cmd
+# 現在の.gitmodulesのURL確認
+git config -f .gitmodules submodule.practice.url
+
+# 相対パス（./practice）の場合は更新が必要
+git config -f .gitmodules submodule.practice.url <actual-practice-repository-url>
+
+# 変更をコミット
+git add .gitmodules
+git commit -m "Update submodule URL to remote repository"
+git push origin main
 ```
 
 #### 📋 Submodule更新後の推奨ワークフロー
@@ -604,7 +650,41 @@ git submodule update
 git submodule update --init --force
 ```
 
-#### 4. Git Push関連エラー
+#### 4. Submodule URL関連エラー
+
+**"fatal: repository './practice' does not exist" エラー（他の人がクローンした場合）**
+```cmd
+# 原因: .gitmodulesのURLが相対パスのまま
+# 解決: .gitmodulesのURLを実際のリモートリポジトリURLに変更
+
+# 現在のSubmodule URL確認
+git config -f .gitmodules submodule.practice.url
+
+# 相対パス（例: ./practice）の場合は変更が必要
+git config -f .gitmodules submodule.practice.url https://github.com/username/practice.git
+
+# 変更をコミット
+git add .gitmodules
+git commit -m "Fix submodule URL to use remote repository"
+git push origin main
+```
+
+**Submoduleが古いURLを参照している場合**
+```cmd
+# 現在設定されているURL確認
+git config -f .gitmodules --list
+
+# 新しいURLに変更
+git config -f .gitmodules submodule.practice.url <new-repository-url>
+
+# Submoduleのローカル設定も更新
+git submodule sync
+
+# Submoduleを再初期化
+git submodule update --init
+```
+
+#### 5. Git Push関連エラー
 
 **"error: src refspec main does not match any" エラー**
 ```cmd
