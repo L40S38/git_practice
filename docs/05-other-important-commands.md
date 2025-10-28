@@ -46,7 +46,7 @@ git cherry-pick --continue
 ### 🌳 cherry-pick の動作例
 
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     branch feature

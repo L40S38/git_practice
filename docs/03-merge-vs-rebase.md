@@ -63,7 +63,7 @@ git merge --abort
 
 #### Fast-Forward Merge（早送りマージ）
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     branch feature
@@ -76,7 +76,7 @@ gitgraph
 
 #### 3-way Merge（三方向マージ）
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     branch feature
@@ -138,7 +138,7 @@ git rebase --skip
 
 #### 基本的なリベース
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     commit id: "E"
@@ -198,7 +198,7 @@ pick g7h8i9j Add password reset
 
 #### 初期状態
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     branch feature
@@ -212,7 +212,7 @@ gitgraph
 
 #### merge を選択した場合
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     branch feature
@@ -230,7 +230,7 @@ gitgraph
 
 #### rebase を選択した場合
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     commit id: "E"

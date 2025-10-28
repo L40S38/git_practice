@@ -69,7 +69,7 @@ git reset --hard HEAD~1
 ### 🔄 reset の動作パターン
 
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     commit id: "C" type: HIGHLIGHT
@@ -148,7 +148,7 @@ git revert --continue
 
 #### 単一コミットの revert
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     commit id: "C" type: HIGHLIGHT
@@ -169,7 +169,7 @@ A---B---C---D---E---R (HEAD -> main)
 
 #### 複数コミットの revert
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     commit id: "C" type: HIGHLIGHT
@@ -214,7 +214,7 @@ git revert HEAD~3..HEAD  # 直近3つのコミットを取り消し
 
 #### 初期状態：問題のあるコミットC
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     commit id: "C" type: HIGHLIGHT
@@ -224,7 +224,7 @@ gitgraph
 
 #### reset を選択した場合
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
 ```
@@ -233,7 +233,7 @@ gitgraph
 
 #### revert を選択した場合
 ```mermaid
-gitgraph
+gitGraph
     commit id: "A"
     commit id: "B"
     commit id: "C" type: HIGHLIGHT
