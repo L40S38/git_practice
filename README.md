@@ -67,23 +67,19 @@ git init
 git add README.md docs/ .gitignore
 git commit -m "Initial commit: Add documentation"
 
-# 2. practice ディレクトリのバックアップ
-xcopy practice practice-backup\ /e /i /q
-
-# 3. practice を独立リポジトリ化
+# 2. practice を独立リポジトリ化
 cd practice
 git init
 git add .
 git commit -m "Initial practice repository"
 cd ..
 
-# 4. Submodule として追加
-rmdir /s /q practice
-git submodule add ./practice-backup practice
+# 3. Submodule として追加
+git submodule add ./practice practice
 git add .gitmodules practice
 git commit -m "Add practice as submodule"
 
-# 5. 初期化と更新
+# 4. 初期化と更新
 git submodule init
 git submodule update
 ```

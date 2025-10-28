@@ -250,19 +250,7 @@ git add README.md docs/ .gitignore
 git commit -m "Initial commit: Add Git learning documentation"
 ```
 
-**3. practice ディレクトリのバックアップ作成**
-```cmd
-# 既存のバックアップを削除（存在する場合）
-rmdir /s /q practice-backup
-
-# practice ディレクトリを practice-backup にコピー
-xcopy practice practice-backup\ /e /i /q
-
-# または robocopy を使用
-robocopy practice practice-backup /e
-```
-
-**4. practice ディレクトリの独立リポジトリ化**
+**3. practice ディレクトリの独立リポジトリ化**
 ```cmd
 # practice ディレクトリに移動
 cd practice
@@ -276,20 +264,17 @@ git commit -m "Initial practice repository with exercises and guides"
 cd ..
 ```
 
-**5. practice をSubmoduleとして追加**
+**4. practice をSubmoduleとして追加**
 ```cmd
-# 現在の practice ディレクトリを削除
-rmdir /s /q practice
-
-# バックアップからSubmoduleとして追加
-git submodule add ./practice-backup practice
+# 現在の practice ディレクトリを直接Submoduleとして追加
+git submodule add ./practice practice
 
 # Submodule追加をコミット
 git add .gitmodules practice
 git commit -m "Add practice directory as submodule"
 ```
 
-**6. Submoduleの初期化と更新**
+**5. Submoduleの初期化と更新**
 ```cmd
 # Submoduleの初期化
 git submodule init
@@ -306,13 +291,13 @@ git submodule status
 より本格的な運用をする場合：
 
 ```cmd
-# Step 4の後、practice-backupをリモートにプッシュ
-cd practice-backup
+# Step 3の後、practice ディレクトリをリモートにプッシュ
+cd practice
 git remote add origin <practice-repository-url>
 git push -u origin main
 cd ..
 
-# リモートリポジトリからSubmoduleとして追加
+# ローカルのpracticeディレクトリを削除してリモートからSubmodule追加
 rmdir /s /q practice
 git submodule add <practice-repository-url> practice
 git add .gitmodules practice
